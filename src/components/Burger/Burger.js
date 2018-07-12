@@ -6,9 +6,15 @@ import BurgerIngredient from './BurgerIngredient/BurgerIngredient';
 const burger = (props) => {
     // An array of strings of the keys of props.ingredients
     const uniqueIngredients = Object.keys(props.ingredients);
+    const deNestArrays = (arr, el) => arr.concat(el);
+    // Below is equivalent to above
+    // const reducer = (arr, el) => {
+    //     return arr.concat(el);
+    // };
+    const initialValue = [];
 
     // An array of all ingredients
-    const allIngredients = uniqueIngredients.map(igKey => {
+    let allIngredients = uniqueIngredients.map(igKey => {
         // The count of each unique ingredient
         const numIngredients = props.ingredients[igKey];
         // Return an array that is filled with the correct number of unique 
@@ -18,7 +24,10 @@ const burger = (props) => {
         return [...Array(numIngredients)].map((_, index) => {
             return <BurgerIngredient key={igKey + index} type={igKey} />;
         });
-    });
+    }).reduce(deNestArrays, initialValue);
+
+    if (allIngredients.length === 0)
+        allIngredients = <p>Please start adding ingredients!</p>;
 
     return (
         <div className={classes.Burger}>
