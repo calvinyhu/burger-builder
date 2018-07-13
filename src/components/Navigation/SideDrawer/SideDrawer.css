@@ -12,8 +12,6 @@
     transition: transform 0.3s ease-out;
 }
 
-/* If our viewport exceeds 500px, then we can never see the side drawer on 
-bigger devices */
 @media (min-width: 500px) {
     .SideDrawer {
         display: none;
@@ -26,4 +24,9 @@ bigger devices */
 
 .Close {
     transform: translateX(-100%);
+}
+
+.Logo {
+    height: 11%;
+    margin-bottom: 32px;
 }
