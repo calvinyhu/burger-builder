@@ -5,6 +5,9 @@ import Burger from '../../components/Burger/Burger';
 import BuildControls from '../../components/Burger/BuildControls/BuildControls';
 import Modal from '../../components/UI/Modal/Modal';
 import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary';
+import Spinner from '../../components/UI/Spinner/Spinner';
+import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
+import axios from '../../axios-orders';
 
 const INGREDIENT_PRICES = {
     salad: 0.5,
@@ -24,6 +27,7 @@ class BurgerBuilder extends Component {
         totalPrice: 4,
         purchaseable: false,
         purchasing: false,
+        loading: false,
     }
 
     updatePurchaseState = (updatedIngredients) => {
@@ -76,8 +80,33 @@ class BurgerBuilder extends Component {
         this.setState({ purchasing: false })
     }
 
+    // Must add ".json" to an endpoint for Firebase to work correctly
     purchaseContinueHandler = () => {
-        alert('You continue!');
+        this.setState({loading: true});
+        const order = {
+            ingredients: this.state.ingredients,
+            // On a real app, you would recalculate the price based on the 
+            // number of ingredients on the server and not the user
+            price: this.state.totalPrice,
+            customer: {
+                name: 'Calvin',
+                address: {
+                    street: 'Street Name',
+                    zipCode: '99999',
+                    country: 'United States',
+                },
+                email: 'calvin@firebase.com',
+            },
+            deliveryMethod: 'fastest',
+        };
+        // Comment out this post to see the spinner a bit longer.
+        axios.post('/orders.json', order)
+            .then(response => {
+                this.setState({loading: false, purchasing: false});
+            })
+            .catch(error => {
+                this.setState({loading: false, purchasing: false});
+            });
     }
 
     render() {
@@ -85,15 +114,21 @@ class BurgerBuilder extends Component {
         // each type is mapped to either true or false
         for (let key in disabledInfo)
             disabledInfo[key] = (disabledInfo[key] <= 0);
+
+        let orderSummary = <OrderSummary 
+            ingredients={this.state.ingredients}
+            price={this.state.totalPrice.toFixed(2)}
+            purchaseCancel={this.purchaseCancelHandler}
+            purchaseContinue={this.purchaseContinueHandler} />
+
+        if (this.state.loading) {
+            orderSummary = <Spinner />;
+        }
         
         return (
             <Auxiliary>
                 <Modal show={this.state.purchasing} modalClosed={this.purchaseCancelHandler}>
-                    <OrderSummary 
-                        ingredients={this.state.ingredients}
-                        price={this.state.totalPrice.toFixed(2)}
-                        purchaseCancel={this.purchaseCancelHandler}
-                        purchaseContinue={this.purchaseContinueHandler} />
+                    {orderSummary}
                 </Modal>
                 <Burger ingredients={this.state.ingredients} />
                 <BuildControls
@@ -108,4 +143,4 @@ class BurgerBuilder extends Component {
     }
 }
 
-export default BurgerBuilder;
+export default withErrorHandler(BurgerBuilder, axios);
