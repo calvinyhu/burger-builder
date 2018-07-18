@@ -1,26 +1,22 @@
 import React, { Component } from 'react';
+import { Route, Switch } from 'react-router-dom';
 
 import Layout from './hoc/Layout/Layout';
 import BurgerBuilder from './containers/BurgerBuilder/BurgerBuilder';
+import Checkout from './containers/Checkout/Checkout';
+import Orders from './containers/Checkout/Orders/Orders';
 
-// Commented code is used to test @componentWillUnmount in @withErrorHandler.js
 class App extends Component {
-  // state = {
-  //   show: true,
-  // };
-
-  // componentDidMount() {
-  //   setTimeout(() => {
-  //     this.setState({show: false});
-  //   }, 5000);
-  // }
-  
   render() {
     return (
       <div>
         <Layout>
-          {/* {this.state.show ? <BurgerBuilder /> : null} */}
-          <BurgerBuilder />
+          <Switch>
+            {/* Components nested inside Burger Builder don't get the routing props */}
+            <Route path='/burger-builder' component={BurgerBuilder}/>
+            <Route path='/checkout' component={Checkout}/>
+            <Route path='/orders' component={Orders}/>
+          </Switch>
         </Layout>
       </div>
     );

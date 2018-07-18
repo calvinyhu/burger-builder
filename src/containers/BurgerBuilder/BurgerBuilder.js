@@ -88,31 +88,16 @@ class BurgerBuilder extends Component {
 
     // Must add ".json" to an endpoint for Firebase to work correctly
     purchaseContinueHandler = () => {
-        this.setState({loading: true});
-        const order = {
-            ingredients: this.state.ingredients,
-            // On a real app, you would recalculate the price based on the 
-            // number of ingredients on the server and not the user
-            price: this.state.totalPrice,
-            customer: {
-                name: 'Calvin',
-                address: {
-                    street: 'Street Name',
-                    zipCode: '99999',
-                    country: 'United States',
-                },
-                email: 'calvin@firebase.com',
-            },
-            deliveryMethod: 'fastest',
-        };
-        // Comment out this post to see the spinner a bit longer.
-        axios.post('/orders.json', order)
-            .then(response => {
-                this.setState({loading: false, purchasing: false});
-            })
-            .catch(error => {
-                this.setState({loading: false, purchasing: false});
-            });
+        const queryParams = [];
+        for (let i in this.state.ingredients) {
+            queryParams.push(encodeURIComponent(i) + '=' + encodeURIComponent(this.state.ingredients[i]))
+        }
+        queryParams.push('price=' + this.state.totalPrice);
+        const queryString = queryParams.join('&');
+        this.props.history.push({
+            pathname: '/checkout',
+            search: '?' + queryString,
+        });
     }
 
     render() {
