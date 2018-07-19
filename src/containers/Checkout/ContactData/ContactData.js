@@ -84,6 +84,26 @@ class ContactData extends Component {
             });
     }
 
+    inputChangedHandler = (event, inputIdentifier) => {
+        console.log(event.target.value);
+        // First shallow copy the entire order form
+        const updatedOrderForm = {
+            ...this.state.orderForm
+        };
+        // Then shallow copy a specific order form element using the input 
+        // identifier we passed to the inputChangedHandler
+        const updatedFormElement = {
+            ...updatedOrderForm[inputIdentifier]
+        };
+        // Then we do the mutating
+        updatedFormElement.value = event.target.value;
+        // Then we update the order form element
+        updatedOrderForm[inputIdentifier] = updatedFormElement;
+        // Finally we update the original orderForm by setting it equal to the 
+        // updated copy of the order form
+        this.setState({orderForm: updatedOrderForm});
+    }
+
     render() {
         const formElementsArray = [];
         for (let key in this.state.orderForm) {
@@ -100,7 +120,8 @@ class ContactData extends Component {
                         key={formElement.id}
                         elementType={formElement.config.elementType}
                         elementConfig={formElement.config.elementConfig}
-                        value={formElement.config.value}/>
+                        value={formElement.config.value}
+                        changed={(event) => this.inputChangedHandler(event, formElement.id)}/>
                 ))}
                 <Button btnType='Success' clicked={this.orderHandler}>ORDER</Button>
             </form>
