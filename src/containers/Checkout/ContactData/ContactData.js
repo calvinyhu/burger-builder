@@ -67,11 +67,18 @@ class ContactData extends Component {
         // @event.preventDefault prevents @<form> from automatically sending in a request
         event.preventDefault();
         this.setState({loading: true});
+        // formData = name: value, street: value,...
+        const formData = {};
+        // formElementIdentifier = name, email, country...
+        for (let formElementIdentifier in this.state.orderForm) {
+            formData[formElementIdentifier] = this.state.orderForm[formElementIdentifier].value;
+        }
         const order = {
             ingredients: this.props.ingredients,
             // On a real app, you would recalculate the price based on the 
             // number of ingredients on the server and not the user
-            price: this.props.price
+            price: this.props.price,
+            orderData: formData,
         };
         // Comment out this post to see the spinner a bit longer.
         axios.post('/orders.json', order)
@@ -114,7 +121,7 @@ class ContactData extends Component {
         }
 
         let form = (
-            <form>
+            <form onSubmit={this.orderHandler}>
                 {formElementsArray.map(formElement => (
                     <Input
                         key={formElement.id}
