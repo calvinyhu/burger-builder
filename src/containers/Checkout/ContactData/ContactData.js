@@ -1,10 +1,18 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
 import classes from './ContactData.css';
 import Button from '../../../components/UI/Button/Button';
 import axios from '../../../axios-orders';
 import Spinner from '../../../components/UI/Spinner/Spinner';
 import Input from '../../../components/UI/Input/Input';
+
+const mapStateToProps = state => {
+    return {
+        ingredients: state.ingredients,
+        totalPrice: state.totalPrice
+    };
+};
 
 class ContactData extends Component {
     state = {
@@ -107,7 +115,7 @@ class ContactData extends Component {
             ingredients: this.props.ingredients,
             // On a real app, you would recalculate the price based on the 
             // number of ingredients on the server and not the user
-            price: this.props.price,
+            price: this.props.totalPrice,
             orderData: formData,
         };
         // Comment out this post to see the spinner a bit longer.
@@ -206,4 +214,4 @@ class ContactData extends Component {
     }
 }
 
-export default ContactData;
+export default connect(mapStateToProps)(ContactData);
