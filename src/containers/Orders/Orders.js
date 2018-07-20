@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 
-import Order from '../../../components/Order/Order';
-import axios from '../../../axios-orders';
-import withErrorHandler from '../../../hoc/withErrorHandler/withErrorHandler';
-import Spinner from '../../../components/UI/Spinner/Spinner';
-import Auxiliary from '../../../hoc/Auxiliary/Auxiliary';
+import Order from '../../components/Order/Order';
+import axios from '../../axios-orders';
+import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
+import Spinner from '../../components/UI/Spinner/Spinner';
+import Auxiliary from '../../hoc/Auxiliary/Auxiliary';
 
 class Orders extends Component {
     state = {
