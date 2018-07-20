@@ -15,7 +15,6 @@ const mapStateToProps = state => {
     return {
         ingredients: state.ingredients,
         totalPrice: state.totalPrice,
-        purchaseable: state.purchaseable,
     };
 };
 
@@ -42,6 +41,14 @@ class BurgerBuilder extends Component {
             .catch(error => {
                 this.setState({error: true});
             });
+    }
+
+    updatePurchaseState = (ingredients) => {
+        const sum = Object.keys(ingredients)
+            .map(igKey => {
+                return ingredients[igKey];
+            }).reduce((sum, el) => sum + el, 0);
+        return sum > 0;
     }
 
     purchaseHandler = () => {
@@ -86,7 +93,7 @@ class BurgerBuilder extends Component {
                     <Burger ingredients={this.props.ingredients} />
                     <BuildControls
                         price={this.props.totalPrice}
-                        purchaseable={this.props.purchaseable}
+                        purchaseable={this.updatePurchaseState(this.props.ingredients)}
                         ordered={this.purchaseHandler}
                         ingredientAdded={(ig) => this.props.onAddIngredient(ig)}
                         ingredientRemoved={(ig) => this.props.onRemoveIngredient(ig)}

@@ -9,10 +9,9 @@ import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 import reducer from './store/reducers/reducer';
 
-const rootReducer = reducer;
+const store = createStore(reducer);
 
-const store = createStore(rootReducer);
-
+// @Provider should wrap both @BrowserRouter AND @App
 const app = (
     <Provider store={store}>
         <BrowserRouter>
