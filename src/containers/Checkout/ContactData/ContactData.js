@@ -6,11 +6,19 @@ import Button from '../../../components/UI/Button/Button';
 import axios from '../../../axios-orders';
 import Spinner from '../../../components/UI/Spinner/Spinner';
 import Input from '../../../components/UI/Input/Input';
+import * as orderActions from '../../../store/actions/index';
+import withErrorHandler from '../../../hoc/withErrorHandler/withErrorHandler'
 
 const mapStateToProps = state => {
     return {
         ingredients: state.ingredients,
         totalPrice: state.totalPrice
+    };
+};
+
+const mapDispatchToProps = dispatch => {
+    return {
+        onPurchaseBurgerStart: (orderData) => dispatch(orderActions.purchaseBurgerStart(orderData))
     };
 };
 
@@ -104,29 +112,21 @@ class ContactData extends Component {
     orderHandler = (event) => {
         // @event.preventDefault prevents @<form> from automatically sending in a request
         event.preventDefault();
-        this.setState({loading: true});
         // formData = name: value, street: value,...
         const formData = {};
         // formElementIdentifier = name, email, country...
         for (let formElementIdentifier in this.state.orderForm) {
             formData[formElementIdentifier] = this.state.orderForm[formElementIdentifier].value;
         }
-        const order = {
+        const orderData = {
             ingredients: this.props.ingredients,
             // On a real app, you would recalculate the price based on the 
             // number of ingredients on the server and not the user
-            price: this.props.totalPrice,
-            orderData: formData,
+            totalPrice: this.props.totalPrice,
+            formData: formData,
         };
         // Comment out this post to see the spinner a bit longer.
-        axios.post('/orders.json', order)
-            .then(response => {
-                this.setState({loading: false});
-                this.props.history.push('/burger-builder');
-            })
-            .catch(error => {
-                this.setState({loading: false});
-            });
+        this.props.onPurchaseBurgerStart(orderData);
     }
 
     checkValidity(value, rules) {
@@ -214,4 +214,4 @@ class ContactData extends Component {
     }
 }
 
-export default connect(mapStateToProps)(ContactData);
+export default connect(mapStateToProps, mapDispatchToProps)(withErrorHandler(ContactData, axios));
