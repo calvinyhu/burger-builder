@@ -5,7 +5,5 @@ export {
 } from './builderBuilderActions';
 
 export {
-    purchaseBurgerSuccess,
-    purchaseBurgerFail,
-    purchaseBurgerStart,
+    purchaseBurger,
 } from './orderActions';

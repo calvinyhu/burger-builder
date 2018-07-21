@@ -12,13 +12,14 @@ import withErrorHandler from '../../../hoc/withErrorHandler/withErrorHandler'
 const mapStateToProps = state => {
     return {
         ingredients: state.ingredients,
-        totalPrice: state.totalPrice
+        totalPrice: state.totalPrice,
+        loading: state.loading
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
-        onPurchaseBurgerStart: (orderData) => dispatch(orderActions.purchaseBurgerStart(orderData))
+        onPurchaseBurger: (orderData) => dispatch(orderActions.purchaseBurger(orderData))
     };
 };
 
@@ -106,7 +107,6 @@ class ContactData extends Component {
             },
         },
         formIsValid: false,
-        loading: false,
     }
 
     orderHandler = (event) => {
@@ -126,7 +126,7 @@ class ContactData extends Component {
             formData: formData,
         };
         // Comment out this post to see the spinner a bit longer.
-        this.props.onPurchaseBurgerStart(orderData);
+        this.props.onPurchaseBurger(orderData);
     }
 
     checkValidity(value, rules) {
@@ -202,7 +202,7 @@ class ContactData extends Component {
             </form>
         );
 
-        if (this.state.loading)
+        if (this.props.loading)
             form = <Spinner />;
         
         return (
