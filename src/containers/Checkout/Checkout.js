@@ -8,7 +8,8 @@ import Auxiliary from '../../hoc/Auxiliary/Auxiliary';
 
 const mapStateToProps = state => {
     return {
-        ingredients: state.ingredients,
+        ingredients: state.burgerBuilder.ingredients,
+        purchased: state.order.purchased,
     };
 };
 
@@ -23,9 +24,11 @@ class Checkout extends Component {
 
     render() {
         let summary = <Redirect to='/burger-builder' />;
+        const purchasedRedirect = this.props.purchased ? <Redirect to='/burger-builder' /> : null;
         if (this.props.ingredients) {
             summary = (
                 <Auxiliary>
+                    {purchasedRedirect}
                     <CheckoutSummary
                         ingredients={this.props.ingredients}
                         checkoutCancelled={this.checkoutCancelledHandler}

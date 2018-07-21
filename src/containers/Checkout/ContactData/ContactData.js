@@ -11,9 +11,9 @@ import withErrorHandler from '../../../hoc/withErrorHandler/withErrorHandler'
 
 const mapStateToProps = state => {
     return {
-        ingredients: state.ingredients,
-        totalPrice: state.totalPrice,
-        loading: state.loading
+        ingredients: state.burgerBuilder.ingredients,
+        totalPrice: state.burgerBuilder.totalPrice,
+        loading: state.order.loading
     };
 };
 
