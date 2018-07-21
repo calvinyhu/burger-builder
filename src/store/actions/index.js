@@ -1,5 +1,5 @@
 export {
-    initIngredient,
+    initIngredients,
     addIngredient,
     removeIngredient
 } from './builderBuilderActions';

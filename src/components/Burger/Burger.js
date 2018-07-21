@@ -5,6 +5,8 @@ import classes from './Burger.css';
 import BurgerIngredient from './BurgerIngredient/BurgerIngredient';
 
 const burger = (props) => {
+    if (!props.ingredients)
+        return null;
     // An array of strings of the keys of props.ingredients
     const uniqueIngredients = Object.keys(props.ingredients);
     const deNestArrays = (arr, el) => arr.concat(el);
