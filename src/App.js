@@ -5,6 +5,7 @@ import Layout from './hoc/Layout/Layout';
 import BurgerBuilder from './containers/BurgerBuilder/BurgerBuilder';
 import Checkout from './containers/Checkout/Checkout';
 import Orders from './containers/Orders/Orders';
+import Auth from './containers/Auth/Auth';
 
 class App extends Component {
   render() {
@@ -13,6 +14,7 @@ class App extends Component {
         <Layout>
           <Switch>
             {/* Components nested inside Burger Builder don't get the routing props */}
+            <Route path='/auth' component={Auth}/>
             <Route path='/burger-builder' component={BurgerBuilder}/>
             <Route path='/checkout' component={Checkout}/>
             <Route path='/orders' component={Orders}/>

@@ -91,9 +91,6 @@ class BurgerBuilder extends Component {
                 purchaseCancel={this.purchaseCancelHandler}
                 purchaseContinue={this.purchaseContinueHandler} />;
         }
-
-        // if (this.state.loading)
-        //     orderSummary = <Spinner />;
         
         return (
             <Auxiliary>
