@@ -13,13 +13,14 @@ const mapStateToProps = state => {
     return {
         ingredients: state.burgerBuilder.ingredients,
         totalPrice: state.burgerBuilder.totalPrice,
-        loading: state.order.loading
+        loading: state.order.loading,
+        token: state.auth.token,
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
-        onPurchaseBurger: (orderData) => dispatch(orderActions.purchaseBurger(orderData))
+        onPurchaseBurger: (orderData, token) => dispatch(orderActions.purchaseBurger(orderData, token))
     };
 };
 
@@ -126,7 +127,7 @@ class ContactData extends Component {
             formData: formData,
         };
         // Comment out this post to see the spinner a bit longer.
-        this.props.onPurchaseBurger(orderData);
+        this.props.onPurchaseBurger(orderData, this.props.token);
     }
 
     checkValidity(value, rules) {

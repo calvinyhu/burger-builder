@@ -1,13 +1,26 @@
 import React, { Component } from 'react';
-import { Route, Switch, Redirect } from 'react-router-dom';
+import { Route, Switch, Redirect, withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
 
 import Layout from './hoc/Layout/Layout';
 import BurgerBuilder from './containers/BurgerBuilder/BurgerBuilder';
 import Checkout from './containers/Checkout/Checkout';
 import Orders from './containers/Orders/Orders';
 import Auth from './containers/Auth/Auth';
+import Logout from './containers/Auth/Logout/Logout';
+import * as actions from './store/actions/index';
+
+const mapDispatchToProps = dispatch => {
+  return {
+    onTryAutoSignUp: () => dispatch(actions.authCheckState())
+  }
+}
 
 class App extends Component {
+  componentDidMount() {
+    this.props.onTryAutoSignUp()
+  }
+
   render() {
     return (
       <div>
@@ -15,6 +28,7 @@ class App extends Component {
           <Switch>
             {/* Components nested inside Burger Builder don't get the routing props */}
             <Route path='/auth' component={Auth}/>
+            <Route path='/logout' component={Logout}/>
             <Route path='/burger-builder' component={BurgerBuilder}/>
             <Route path='/checkout' component={Checkout}/>
             <Route path='/orders' component={Orders}/>
@@ -26,4 +40,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default withRouter(connect(null, mapDispatchToProps)(App));
