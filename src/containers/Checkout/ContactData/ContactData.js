@@ -7,7 +7,8 @@ import axios from '../../../axios-orders';
 import Spinner from '../../../components/UI/Spinner/Spinner';
 import Input from '../../../components/UI/Input/Input';
 import * as orderActions from '../../../store/actions/index';
-import withErrorHandler from '../../../hoc/withErrorHandler/withErrorHandler'
+import withErrorHandler from '../../../hoc/withErrorHandler/withErrorHandler';
+import  { updateObject, checkValidity } from '../../../shared/utility';
 
 const mapStateToProps = state => {
     return {
@@ -132,41 +133,18 @@ class ContactData extends Component {
         this.props.onPurchaseBurger(orderData, this.props.token);
     }
 
-    checkValidity(value, rules) {
-        let isValid = true;
-
-        if (!rules)
-            return true;
-
-        if (rules.required)
-            isValid = value.trim() !== '' && isValid;
-
-        if (rules.minLength)
-            isValid = value.length >= rules.minLength && isValid;
-
-        if (rules.maxLength)
-            isValid = value.length <= rules.maxLength && isValid;
-
-        return isValid;
-    }
-
     inputChangedHandler = (event, inputIdentifier) => {
         console.log(event.target.value);
-        // First shallow copy the entire order form
-        const updatedOrderForm = {
-            ...this.state.orderForm
-        };
-        // Then shallow copy a specific order form element using the input 
-        // identifier we passed to the inputChangedHandler
-        const updatedFormElement = {
-            ...updatedOrderForm[inputIdentifier]
-        };
-        // Then we do the mutating
-        updatedFormElement.value = event.target.value;
-        updatedFormElement.valid = this.checkValidity(updatedFormElement.value, updatedFormElement.validation);
-        updatedFormElement.touched = true;
-        // Then we update the order form element
-        updatedOrderForm[inputIdentifier] = updatedFormElement;
+
+        const updatedFormElement = updateObject(this.state.orderForm[inputIdentifier], {
+            value: event.target.value,
+            valid: checkValidity(event.target.value, this.state.orderForm[inputIdentifier].validation),
+            touched: true
+        });
+
+        const updatedOrderForm = updateObject(this.state.orderForm, {
+            [inputIdentifier]: updatedFormElement
+        });
         
         // Check if the entire form is valid
         let formIsValid = true;
