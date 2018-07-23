@@ -10,6 +10,12 @@ import Auth from './containers/Auth/Auth';
 import Logout from './containers/Auth/Logout/Logout';
 import * as actions from './store/actions/index';
 
+const mapStateToProps = state => {
+  return {
+    isAuthenticated: state.auth.token !== null,
+  }
+}
+
 const mapDispatchToProps = dispatch => {
   return {
     onTryAutoSignUp: () => dispatch(actions.authCheckState())
@@ -22,17 +28,34 @@ class App extends Component {
   }
 
   render() {
+    // Routes for unauthenticated users
+    let routes = (
+      <Switch>
+        <Route path='/burger-builder' component={BurgerBuilder}/>
+        <Route path='/auth' component={Auth}/>
+        <Redirect to='/burger-builder' />
+      </Switch>
+    )
+
+    // Route guards for frontend
+    if (this.props.isAuthenticated) {
+      // Routes for authenticated users
+      routes = (
+        <Switch>
+          <Route path='/burger-builder' component={BurgerBuilder}/>
+          <Route path='/checkout' component={Checkout}/>
+          <Route path='/orders' component={Orders}/>
+          <Route path='/logout' component={Logout}/>
+          <Redirect to='/burger-builder' />
+        </Switch>
+      )
+    }
+
     return (
       <div>
         <Layout>
           <Switch>
-            {/* Components nested inside Burger Builder don't get the routing props */}
-            <Route path='/auth' component={Auth}/>
-            <Route path='/logout' component={Logout}/>
-            <Route path='/burger-builder' component={BurgerBuilder}/>
-            <Route path='/checkout' component={Checkout}/>
-            <Route path='/orders' component={Orders}/>
-            <Redirect from='/' to='/burger-builder' />
+            {routes}
           </Switch>
         </Layout>
       </div>
@@ -40,4 +63,4 @@ class App extends Component {
   }
 }
 
-export default withRouter(connect(null, mapDispatchToProps)(App));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App));

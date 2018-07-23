@@ -15,6 +15,7 @@ const mapStateToProps = state => {
         totalPrice: state.burgerBuilder.totalPrice,
         loading: state.order.loading,
         token: state.auth.token,
+        userId: state.auth.userId,
     };
 };
 
@@ -125,6 +126,7 @@ class ContactData extends Component {
             // number of ingredients on the server and not the user
             totalPrice: this.props.totalPrice,
             formData: formData,
+            userId: this.props.userId,
         };
         // Comment out this post to see the spinner a bit longer.
         this.props.onPurchaseBurger(orderData, this.props.token);
