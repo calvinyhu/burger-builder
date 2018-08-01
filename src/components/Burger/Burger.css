@@ -8,6 +8,10 @@
     font-size: 1.2rem;
 }
 
+.Burger::-webkit-scrollbar {
+    width: 0
+}
+
 /* The below media queries ensures that the Burger Builder web app looks good 
 on any device. */
 /* If min-width of viewport is 1000px and min-height of viewport is 700px */
